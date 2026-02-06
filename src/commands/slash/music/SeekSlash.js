@@ -58,6 +58,17 @@ const command = new SlashCommand()
       });
     }
 
+    if (!player.current) {
+      return interaction.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor(client.embedColor)
+            .setDescription(`:x: | No track is currently playing. Use the play command to add songs to the queue.`),
+        ],
+        flags: MessageFlags.Ephemeral,
+      });
+    }
+
     await interaction.deferReply();
 
     const time = ms(track);
@@ -71,8 +82,7 @@ const command = new SlashCommand()
           new EmbedBuilder()
             .setColor(client.embedColor)
             .setDescription(
-              `:white_check_mark: | ${
-                time < position ? "Rewind" : "Seeked"
+              `:white_check_mark: | ${time < position ? "Rewind" : "Seeked"
               } current playing track to \`${ms(time)}\``
             ),
         ],

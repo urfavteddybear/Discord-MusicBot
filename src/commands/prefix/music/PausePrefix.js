@@ -22,6 +22,16 @@ module.exports = {
       });
     }
 
+    if (!player.current) {
+      return message.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor(client.embedColor)
+            .setDescription(`:x: | No track is currently playing. Use the play command to add songs to the queue.`),
+        ],
+      });
+    }
+
     if (!message.member.voice.channel) {
       return message.reply({
         embeds: [
@@ -53,6 +63,46 @@ module.exports = {
 
     await player.pause(true);
     let song = player.current;
+
+    // Update the Now Playing message button to show resume emoji
+    try {
+      const nowPlayingMessage = client.playerHandler.nowPlayingMessages.get(message.guild.id);
+      if (nowPlayingMessage) {
+        const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+
+        const prevButton = new ButtonBuilder()
+          .setCustomId("previous_interaction")
+          .setStyle(ButtonStyle.Primary)
+          .setDisabled(!player.previous)
+          .setEmoji("⏮️");
+
+        const pauseButton = new ButtonBuilder()
+          .setCustomId("pause_interaction")
+          .setStyle(ButtonStyle.Primary)
+          .setEmoji("▶️"); // Resume emoji since we just paused
+
+        const nextButton = new ButtonBuilder()
+          .setCustomId("skip_interaction")
+          .setStyle(ButtonStyle.Primary)
+          .setEmoji("⏭️");
+
+        const shuffleButton = new ButtonBuilder()
+          .setCustomId("shuffle_interaction")
+          .setStyle(ButtonStyle.Primary)
+          .setEmoji("🔀");
+
+        const stopButton = new ButtonBuilder()
+          .setCustomId("stop_interaction")
+          .setStyle(ButtonStyle.Danger)
+          .setEmoji("⏹️");
+
+        const row = new ActionRowBuilder().addComponents([prevButton, pauseButton, nextButton, shuffleButton, stopButton]);
+
+        await nowPlayingMessage.edit({ components: [row] }).catch(() => { });
+      }
+    } catch (error) {
+      // Silently fail if message update fails
+    }
 
     return message.reply({
       embeds: [

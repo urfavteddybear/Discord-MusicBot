@@ -29,6 +29,16 @@ module.exports = {
       });
     }
 
+    if (!query && player && !player.current) {
+      return message.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor("Red")
+            .setDescription(`:x: | No track is currently playing. Use the play command to add songs to the queue.`),
+        ],
+      });
+    }
+
     function splitText(text, maxChunkLength) {
       const chunks = [];
       for (let i = 0; i < text.length; i += maxChunkLength) {

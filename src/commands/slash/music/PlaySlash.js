@@ -111,9 +111,12 @@ const command = new SlashCommand()
     if (loadType === "search" || loadType === "track") {
       const track = tracks[0];
       await player.queue.add(track);
-      if (!player.playing && !player.paused) player.play();
 
-      if (player.queue.size < 1) return interaction.deleteReply();
+      // Start playing if there's no current track
+      if (!player.current) {
+        await player.play();
+      }
+
       return interaction.editReply({
         embeds: [
           new EmbedBuilder()
@@ -128,7 +131,10 @@ const command = new SlashCommand()
     if (loadType === "playlist") {
       for (let track of res.tracks) player.queue.add(track);
 
-      if (!player.playing && !player.paused) player.play();
+      // Start playing if there's no current track
+      if (!player.current) {
+        await player.play();
+      }
 
       return interaction.editReply({
         embeds: [

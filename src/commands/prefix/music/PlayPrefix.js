@@ -114,9 +114,12 @@ module.exports = {
     if (loadType === "search" || loadType === "track") {
       const track = tracks[0];
       await player.queue.add(track);
-      if (!player.playing && !player.paused) player.play();
 
-      if (player.queue.size < 1) return message.delete();
+      // Start playing if there's no current track
+      if (!player.current) {
+        await player.play();
+      }
+
       return message.reply({
         embeds: [
           new EmbedBuilder()
@@ -131,7 +134,10 @@ module.exports = {
     if (loadType === "playlist") {
       for (let track of res.tracks) player.queue.add(track);
 
-      if (!player.playing && !player.paused) player.play();
+      // Start playing if there's no current track
+      if (!player.current) {
+        await player.play();
+      }
 
       return message.reply({
         embeds: [

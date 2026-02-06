@@ -33,6 +33,17 @@ const command = new SlashCommand()
       });
     }
 
+    if (!query && player && !player.current) {
+      return interaction.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor("Red")
+            .setDescription(`:x: | No track is currently playing. Use the play command to add songs to the queue.`),
+        ],
+        flags: MessageFlags.Ephemeral,
+      });
+    }
+
     function splitText(text, maxChunkLength) {
       const chunks = [];
       for (let i = 0; i < text.length; i += maxChunkLength) {

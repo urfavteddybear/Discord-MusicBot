@@ -52,6 +52,17 @@ const command = new SlashCommand()
       });
     }
 
+    if (!player.current) {
+      return interaction.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor(client.embedColor)
+            .setDescription(`:x: | No track is currently playing. Use the play command to add songs to the queue.`),
+        ],
+        flags: MessageFlags.Ephemeral,
+      });
+    }
+
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
     let song = player.current.info;

@@ -84,7 +84,48 @@ module.exports = {
 
       if (buttonId === "pause_interaction") {
         const isPaused = player.paused;
-        await player.pause(player.playing);
+        // Toggle pause state: if paused, resume (false); if playing, pause (true)
+        await player.pause(!isPaused);
+
+        // Update the Now Playing message button emoji
+        try {
+          const nowPlayingMessage = client.playerHandler.nowPlayingMessages.get(interaction.guild.id);
+          if (nowPlayingMessage) {
+            const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+
+            const prevButton = new ButtonBuilder()
+              .setCustomId("previous_interaction")
+              .setStyle(ButtonStyle.Primary)
+              .setDisabled(!player.previous)
+              .setEmoji("⏮️");
+
+            const pauseButton = new ButtonBuilder()
+              .setCustomId("pause_interaction")
+              .setStyle(ButtonStyle.Primary)
+              .setEmoji(isPaused ? "⏸️" : "▶️"); // If was paused, show pause emoji (now playing); if was playing, show resume emoji (now paused)
+
+            const nextButton = new ButtonBuilder()
+              .setCustomId("skip_interaction")
+              .setStyle(ButtonStyle.Primary)
+              .setEmoji("⏭️");
+
+            const shuffleButton = new ButtonBuilder()
+              .setCustomId("shuffle_interaction")
+              .setStyle(ButtonStyle.Primary)
+              .setEmoji("🔀");
+
+            const stopButton = new ButtonBuilder()
+              .setCustomId("stop_interaction")
+              .setStyle(ButtonStyle.Danger)
+              .setEmoji("⏹️");
+
+            const row = new ActionRowBuilder().addComponents([prevButton, pauseButton, nextButton, shuffleButton, stopButton]);
+
+            await nowPlayingMessage.edit({ components: [row] }).catch(() => { });
+          }
+        } catch (error) {
+          // Silently fail if message update fails
+        }
 
         const pauseMessage = isPaused
           ? `:white_check_mark: | ${interaction.member.user} used the button to resume the current playing track.`

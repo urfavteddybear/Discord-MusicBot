@@ -24,6 +24,16 @@ module.exports = {
       });
     }
 
+    if (!player.current) {
+      return message.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor(client.embedColor)
+            .setDescription(`:x: | No track is currently playing. Use the play command to add songs to the queue.`),
+        ],
+      });
+    }
+
     if (!message.member.voice.channel) {
       return message.reply({
         embeds: [
@@ -85,11 +95,11 @@ module.exports = {
     return message.reply({
       embeds: [
         new EmbedBuilder()
-        .setColor(client.embedColor)
-      .setDescription(
-        `**:musical_note: | Now playing:** [${song.title}](${song.uri}) [${song.requester}]`
-      )
-    .setImage("attachment://card.png")
+          .setColor(client.embedColor)
+          .setDescription(
+            `**:musical_note: | Now playing:** [${song.title}](${song.uri}) [${song.requester}]`
+          )
+          .setImage("attachment://card.png")
       ],
       files: [attachment],
     });

@@ -15,7 +15,7 @@ class MusicBot extends Client {
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildVoiceStates,
-        // GatewayIntentBits.MessageContent,
+        GatewayIntentBits.MessageContent,
       ],
     });
     this.config = require("../config");
@@ -51,7 +51,7 @@ class MusicBot extends Client {
       if (!this.config.errorLog.enabled || !this.config.errorLog.channelId) {
         return;
       }
-      
+
       try {
         const channel = await this.channels.fetch(this.config.errorLog.channelId).catch(() => null);
         if (!channel || !channel.isTextBased()) {
@@ -71,13 +71,13 @@ class MusicBot extends Client {
           .setTimestamp();
 
         if (error.stack) {
-          const stackTrace = error.stack.length > 1000 
-            ? error.stack.substring(0, 1000) + "..." 
+          const stackTrace = error.stack.length > 1000
+            ? error.stack.substring(0, 1000) + "..."
             : error.stack;
-          errorEmbed.addFields({ 
-            name: "Stack Trace", 
-            value: `\`\`\`${stackTrace}\`\`\``, 
-            inline: false 
+          errorEmbed.addFields({
+            name: "Stack Trace",
+            value: `\`\`\`${stackTrace}\`\`\``,
+            inline: false
           });
         }
 
@@ -94,14 +94,14 @@ class MusicBot extends Client {
         await this.logErrorToDiscord(error, "UnhandledRejection - Missing Access");
         return;
       }
-      
+
       // Handle node connection errors gracefully
       if (error.code === 'ECONNREFUSED' || error.message.includes('fetch failed')) {
         this.bot.warn(`Node connection failed: ${error.message}`);
         this.bot.warn('Bot will continue operating with available nodes.');
         return;
       }
-      
+
       if (error.code !== 40060 && error.code !== 10008) {
         this.bot.error(
           `An error has been detected by system => errorType: UnhandledRejection.`
@@ -117,14 +117,14 @@ class MusicBot extends Client {
         await this.logErrorToDiscord(error, "UncaughtException - Missing Access");
         return;
       }
-      
+
       // Handle node connection errors gracefully
       if (error.code === 'ECONNREFUSED' || error.message.includes('fetch failed')) {
         this.bot.warn(`Node connection failed: ${error.message}`);
         this.bot.warn('Bot will continue operating with available nodes.');
         return;
       }
-      
+
       if (error.code !== 40060 && error.code !== 10008) {
         this.bot.error(
           `An error has been detected by system => errorType: uncaughtException.`

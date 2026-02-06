@@ -63,10 +63,61 @@ const command = new SlashCommand()
       })
     }
 
+    if (!player.current) {
+      return interaction.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor(client.embedColor)
+            .setDescription(`:x: | No track is currently playing. Use the play command to add songs to the queue.`),
+        ],
+        flags: MessageFlags.Ephemeral,
+      });
+    }
+
     await interaction.deferReply();
 
     await player.pause(false);
     let song = player.current;
+
+    // Update the Now Playing message button to show pause emoji
+    try {
+      const nowPlayingMessage = client.playerHandler.nowPlayingMessages.get(interaction.guild.id);
+      if (nowPlayingMessage) {
+        const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+
+        const prevButton = new ButtonBuilder()
+          .setCustomId("previous_interaction")
+          .setStyle(ButtonStyle.Primary)
+          .setDisabled(!player.previous)
+          .setEmoji("⏮️");
+
+        const pauseButton = new ButtonBuilder()
+          .setCustomId("pause_interaction")
+          .setStyle(ButtonStyle.Primary)
+          .setEmoji("⏸️"); // Pause emoji since we just resumed
+
+        const nextButton = new ButtonBuilder()
+          .setCustomId("skip_interaction")
+          .setStyle(ButtonStyle.Primary)
+          .setEmoji("⏭️");
+
+        const shuffleButton = new ButtonBuilder()
+          .setCustomId("shuffle_interaction")
+          .setStyle(ButtonStyle.Primary)
+          .setEmoji("🔀");
+
+        const stopButton = new ButtonBuilder()
+          .setCustomId("stop_interaction")
+          .setStyle(ButtonStyle.Danger)
+          .setEmoji("⏹️");
+
+        const row = new ActionRowBuilder().addComponents([prevButton, pauseButton, nextButton, shuffleButton, stopButton]);
+
+        await nowPlayingMessage.edit({ components: [row] }).catch(() => { });
+      }
+    } catch (error) {
+      // Silently fail if message update fails
+    }
 
     return interaction.editReply({
       embeds: [

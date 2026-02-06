@@ -23,6 +23,16 @@ module.exports = {
       });
     }
 
+    if (!player.current) {
+      return message.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor(client.embedColor)
+            .setDescription(`:x: | No track is currently playing. Use the play command to add songs to the queue.`),
+        ],
+      });
+    }
+
     if (!message.member.voice.channel) {
       return message.reply({
         embeds: [
