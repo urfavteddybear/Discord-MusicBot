@@ -68,7 +68,8 @@ module.exports = {
       const buttonId = interaction.customId;
 
       if (buttonId === "previous_interaction") {
-        await player.queue.add(player.previous);
+        await player.queue.unshift(player.current);
+        await player.queue.unshift(player.previous);
         await player.stop();
 
         return interaction.reply({

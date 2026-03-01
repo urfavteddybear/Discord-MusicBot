@@ -62,7 +62,8 @@ const command = new SlashCommand()
       });
     }
 
-    await player.queue.add(player.previous);
+    await player.queue.unshift(player.current);
+    await player.queue.unshift(player.previous);
     await player.stop();
 
     return interaction.editReply({
