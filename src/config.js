@@ -18,6 +18,8 @@ module.exports = {
     storageType: process.env.storageType || "local", // Storage type: "mongo" for MongoDB, "local" for JSON file
     mongoUrl: process.env.mongoUrl || "", // Mongodb url for database
     geniusToken: process.env.geniusToken || "", // Genius token use to fetch lyrics, you can leave it blank.
+    spotifyClientId: process.env.spotifyClientId || "", // Spotify Client ID for Spotify support
+    spotifyClientSecret: process.env.spotifyClientSecret || "", // Spotify Client Secret for Spotify support
     prefix: process.env.prefix || "?", // Default prefix is set to "?" use prefix command to change
     embedColor: process.env.embedColor || "2F3136", // You can use any HEX Color but without the "#"
   },
@@ -33,7 +35,7 @@ module.exports = {
   nodes: [
     {
       name: "Private",
-      host: "0.0.0.0",
+      host: "100.99.1.3",
       password: "youshallnotpass",
       port: 2333,
       secure: false,

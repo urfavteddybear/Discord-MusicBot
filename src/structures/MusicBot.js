@@ -44,6 +44,8 @@ class MusicBot extends Client {
       reconnectTries: 50,
       resumeKey: null,
       resumeTimeout: 60,
+      spotifyClientId: this.config.botSettings.spotifyClientId || null,
+      spotifyClientSecret: this.config.botSettings.spotifyClientSecret || null,
     });
 
     // Error logging utility
