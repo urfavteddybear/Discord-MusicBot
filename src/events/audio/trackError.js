@@ -27,6 +27,4 @@ module.exports = async (client, player, track, error) => {
     trackError,
     `Track Error: ${song.title} in ${guild.name} (${player.guildId})`
   );
-
-  await player.stop();
 };
