@@ -115,8 +115,8 @@ module.exports = {
       const track = tracks[0];
       await player.queue.add(track);
 
-      // Start playing if there's no current track
-      if (!player.current) {
+      // Start playing if the player is not currently playing
+      if (!player.playing) {
         await player.play();
       }
 
@@ -134,8 +134,8 @@ module.exports = {
     if (loadType === "playlist") {
       for (let track of res.tracks) player.queue.add(track);
 
-      // Start playing if there's no current track
-      if (!player.current) {
+      // Start playing if the player is not currently playing
+      if (!player.playing) {
         await player.play();
       }
 
