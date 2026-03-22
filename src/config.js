@@ -22,6 +22,7 @@ module.exports = {
     spotifyClientSecret: process.env.spotifyClientSecret || "", // Spotify Client Secret for Spotify support
     prefix: process.env.prefix || "?", // Default prefix is set to "?" use prefix command to change
     embedColor: process.env.embedColor || "2F3136", // You can use any HEX Color but without the "#"
+    youtubeSupport: false, // Set to false to disable Support for youtube/ytm links and autoplay
   },
 
   // Error Logging Configuration

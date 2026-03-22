@@ -39,7 +39,7 @@ class MusicBot extends Client {
         const guild = this.guilds.cache.get(payload.d.guild_id);
         if (guild) guild.shard.send(payload);
       },
-      defaultSearchPlatform: "ytmsearch",
+      defaultSearchPlatform: "spsearch",
       reconnectTimeout: 10000,
       reconnectTries: 50,
       resumeKey: null,

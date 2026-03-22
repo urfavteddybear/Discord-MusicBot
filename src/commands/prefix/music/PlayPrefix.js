@@ -12,6 +12,17 @@ module.exports = {
   run: async (message, args, client, prefix) => {
     const query = args.join(" ");
 
+    const ytRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be|music\.youtube\.com)\/.+$/gi;
+    if (!client.config.botSettings.youtubeSupport && ytRegex.test(query)) {
+      return message.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor("Red")
+            .setDescription(`:x: | The bot no longer supports YouTube or YouTube Music links.`),
+        ],
+      });
+    }
+
     if (!query) {
       return message.reply({
         embeds: [

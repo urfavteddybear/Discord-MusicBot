@@ -10,6 +10,16 @@ module.exports = {
   aliases: ["ap", "autoqueue"],
 
   run: async (message, args, client, prefix) => {
+    if (!client.config.botSettings.youtubeSupport) {
+      return message.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor("Red")
+            .setDescription(`:x: | Autoplay is disabled because YouTube support is inactive.`),
+        ],
+      });
+    }
+
     const player = client.manager.players.get(message.guild.id);
 
     if (!player) {

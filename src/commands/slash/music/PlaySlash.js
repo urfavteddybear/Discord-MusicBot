@@ -15,6 +15,18 @@ const command = new SlashCommand()
   .setRun(async (client, interaction, options) => {
     const query = interaction.options.getString("query");
 
+    const ytRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be|music\.youtube\.com)\/.+$/gi;
+    if (!client.config.botSettings.youtubeSupport && ytRegex.test(query)) {
+      return interaction.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor("Red")
+            .setDescription(`:x: | The bot no longer supports YouTube or YouTube Music links.`),
+        ],
+        flags: MessageFlags.Ephemeral,
+      });
+    }
+
     if (!interaction.member.voice.channel) {
       return interaction.reply({
         embeds: [

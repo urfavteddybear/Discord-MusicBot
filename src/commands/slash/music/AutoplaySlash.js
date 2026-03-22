@@ -6,6 +6,17 @@ const command = new SlashCommand()
   .setDescription("Set autoplay mode to the player and auto queue songs.")
   .setCategory("Music")
   .setRun(async (client, interaction, options) => {
+    if (!client.config.botSettings.youtubeSupport) {
+      return interaction.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor("Red")
+            .setDescription(`:x: | Autoplay is disabled because YouTube support is inactive.`),
+        ],
+        flags: MessageFlags.Ephemeral,
+      });
+    }
+
     const player = client.manager.players.get(interaction.guild.id);
 
     if (!player) {
